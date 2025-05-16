@@ -17,11 +17,12 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
-  SidebarMenu,
+  SidebarGroupMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarTrigger,
   useSidebar,
+  SidebarMenu
 } from "@/components/ui/sidebar";
 
 const ConfigurationSidebar = () => {
@@ -58,7 +59,7 @@ const ConfigurationSidebar = () => {
       <SidebarTrigger className="m-2 self-end" />
       
       <SidebarContent>
-        <SidebarGroup defaultOpen>
+        <SidebarGroup>
           <SidebarGroupLabel>Configuración</SidebarGroupLabel>
           
           <SidebarGroupContent>
