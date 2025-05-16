@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   return (
-    <header className="bg-delivery-600 text-white shadow-md">
+    <header className="bg-purple-600 text-white shadow-md">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Package size={28} />
@@ -14,14 +14,14 @@ const Navbar = () => {
         </div>
         
         <nav className="hidden md:flex space-x-6">
-          <Link to="/" className="hover:text-delivery-200 transition-colors">Inicio</Link>
-          <Link to="/dashboard" className="hover:text-delivery-200 transition-colors">Panel</Link>
-          <Link to="/sales" className="hover:text-delivery-200 transition-colors">Ventas</Link>
-          <Link to="/config" className="hover:text-delivery-200 transition-colors">Configuración</Link>
+          <Link to="/" className="hover:text-purple-200 transition-colors">Inicio</Link>
+          <Link to="/dashboard" className="hover:text-purple-200 transition-colors">Panel</Link>
+          <Link to="/sales" className="hover:text-purple-200 transition-colors">Ventas</Link>
+          <Link to="/config" className="hover:text-purple-200 transition-colors">Configuración</Link>
         </nav>
         
         <div className="flex items-center space-x-4">
-          <Button variant="outline" className="bg-transparent border-white text-white hover:bg-delivery-700">
+          <Button variant="outline" className="bg-transparent border-white text-white hover:bg-purple-700">
             Mi Cuenta
           </Button>
           <Button variant="ghost" size="icon" className="md:hidden text-white">
