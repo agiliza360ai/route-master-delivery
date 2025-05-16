@@ -14,6 +14,7 @@ import BrandConfig from "./pages/Config/BrandConfig";
 import PlansConfig from "./pages/Config/PlansConfig";
 import ManualsConfig from "./pages/Config/ManualsConfig";
 import IncidentsConfig from "./pages/Config/IncidentsConfig";
+import SalesDashboard from "./pages/Sales/SalesDashboard";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
           
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/sales" element={<SalesDashboard />} />
             
             <Route path="/config" element={<ConfigLayout />}>
               <Route index element={<ConfigIndex />} />

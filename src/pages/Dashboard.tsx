@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Package, Truck, Settings, Users } from 'lucide-react';
+import { Package, Truck, Settings, Users, ChartBar } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const DashboardItem = ({ 
@@ -54,6 +54,12 @@ const Dashboard = () => {
           description="Base de datos de clientes" 
           icon={Users} 
           href="/customers" 
+        />
+        <DashboardItem 
+          title="Ventas" 
+          description="Análisis de ventas y métricas" 
+          icon={ChartBar} 
+          href="/sales" 
         />
         <DashboardItem 
           title="Configuración" 

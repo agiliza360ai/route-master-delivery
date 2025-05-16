@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Package } from 'lucide-react';
+import { Package, ChartBar } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
@@ -16,6 +16,7 @@ const Navbar = () => {
         <nav className="hidden md:flex space-x-6">
           <Link to="/" className="hover:text-delivery-200 transition-colors">Inicio</Link>
           <Link to="/dashboard" className="hover:text-delivery-200 transition-colors">Panel</Link>
+          <Link to="/sales" className="hover:text-delivery-200 transition-colors">Ventas</Link>
           <Link to="/config" className="hover:text-delivery-200 transition-colors">Configuración</Link>
         </nav>
         
