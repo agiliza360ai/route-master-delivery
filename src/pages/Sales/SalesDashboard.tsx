@@ -4,6 +4,15 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { 
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { 
   BarChart, 
   Bar, 
   LineChart, 
@@ -321,57 +330,55 @@ const SalesDashboard = () => {
           <CardHeader>
             <div className="flex justify-between items-center">
               <CardTitle className="text-lg font-semibold text-purple-800">Productos Destacados</CardTitle>
-              <Tabs defaultValue="quantity" className="w-[400px]">
-                <TabsList>
-                  <TabsTrigger value="quantity">Por Cantidad</TabsTrigger>
-                  <TabsTrigger value="revenue">Por Facturación</TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="quantity" className="mt-4">
-                  <div className="h-[300px]">
-                    <ChartContainer 
-                      config={{ 
-                        quantity: { color: COLORS.primary }
-                      }}
-                    >
-                      <BarChart 
-                        data={topSellingProducts.slice().sort((a, b) => b.quantity - a.quantity)} 
-                        layout="vertical"
-                      >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis type="number" />
-                        <YAxis type="category" dataKey="name" width={150} />
-                        <ChartTooltip content={<ChartTooltipContent />} />
-                        <Bar dataKey="quantity" name="Cantidad vendida" fill="var(--color-quantity)" />
-                      </BarChart>
-                    </ChartContainer>
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="revenue" className="mt-4">
-                  <div className="h-[300px]">
-                    <ChartContainer 
-                      config={{ 
-                        revenue: { color: COLORS.secondary }
-                      }}
-                    >
-                      <BarChart 
-                        data={topSellingProducts.slice().sort((a, b) => b.revenue - a.revenue)} 
-                        layout="vertical"
-                      >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis type="number" />
-                        <YAxis type="category" dataKey="name" width={150} />
-                        <ChartTooltip content={<ChartTooltipContent />} />
-                        <Bar dataKey="revenue" name="Facturación (S/)" fill="var(--color-revenue)" />
-                      </BarChart>
-                    </ChartContainer>
-                  </div>
-                </TabsContent>
-              </Tabs>
             </div>
           </CardHeader>
           <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="text-md font-semibold mb-3 text-purple-700">Por Cantidad</h3>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Producto</TableHead>
+                      <TableHead className="text-right">Cantidad</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {topSellingProducts
+                      .slice()
+                      .sort((a, b) => b.quantity - a.quantity)
+                      .map((product) => (
+                        <TableRow key={`qty-${product.name}`}>
+                          <TableCell>{product.name}</TableCell>
+                          <TableCell className="text-right font-medium">{product.quantity}</TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </div>
+              <div>
+                <h3 className="text-md font-semibold mb-3 text-purple-700">Por Facturación</h3>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Producto</TableHead>
+                      <TableHead className="text-right">Facturación (S/)</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {topSellingProducts
+                      .slice()
+                      .sort((a, b) => b.revenue - a.revenue)
+                      .map((product) => (
+                        <TableRow key={`rev-${product.name}`}>
+                          <TableCell>{product.name}</TableCell>
+                          <TableCell className="text-right font-medium">S/ {product.revenue}</TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
