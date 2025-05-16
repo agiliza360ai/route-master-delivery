@@ -6,8 +6,8 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 
 const AppLayout = () => {
   return (
-    <SidebarProvider collapsedWidth={64}>
-      <div className="flex flex-col min-h-screen bg-gray-50">
+    <SidebarProvider>
+      <div className="flex flex-col min-h-screen w-full bg-gray-50">
         <Navbar />
         
         <div className="flex flex-grow w-full">

@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
   Package,
@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/sidebar";
 
 const ConfigurationSidebar = () => {
-  const { collapsed } = useSidebar();
+  const sidebar = useSidebar();
   const location = useLocation();
   const currentPath = location.pathname;
   
@@ -51,14 +51,14 @@ const ConfigurationSidebar = () => {
     <Sidebar
       className={cn(
         "border-r border-gray-200 bg-white transition-all duration-300",
-        collapsed ? "w-16" : "w-64"
+        sidebar.state === "collapsed" ? "w-16" : "w-64"
       )}
-      collapsible
+      collapsible="icon"
     >
       <SidebarTrigger className="m-2 self-end" />
       
       <SidebarContent>
-        <SidebarGroup open={isExpanded} defaultOpen>
+        <SidebarGroup defaultOpen>
           <SidebarGroupLabel>Configuración</SidebarGroupLabel>
           
           <SidebarGroupContent>
@@ -68,7 +68,7 @@ const ConfigurationSidebar = () => {
                   <SidebarMenuButton asChild>
                     <NavLink to={item.path} end className={getNavClass}>
                       <item.icon className="mr-2 h-5 w-5 text-delivery-600" />
-                      {!collapsed && <span>{item.title}</span>}
+                      {sidebar.state !== "collapsed" && <span>{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
