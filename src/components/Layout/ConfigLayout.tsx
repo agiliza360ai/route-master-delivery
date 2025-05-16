@@ -7,7 +7,7 @@ const ConfigLayout = () => {
   return (
     <div className="flex flex-grow w-full">
       <ConfigurationSidebar />
-      <main className="ml-64 flex-1 p-6 overflow-auto">
+      <main className="flex-1 p-6 overflow-auto">
         <Outlet />
       </main>
     </div>
