@@ -4,6 +4,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { Calendar, ChartBar, ChartPie, ClockIcon, DollarSign, Package, Receipt, Truck, Users, Check, Utensils } from 'lucide-react';
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 // Sales by payment method data
 const paymentMethodData = [{
@@ -494,37 +495,41 @@ const SalesDashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="text-md font-semibold mb-3 text-purple-700">Por Cantidad</h3>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Producto</TableHead>
-                      <TableHead className="text-right">Cantidad</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {topSellingProducts.slice().sort((a, b) => b.quantity - a.quantity).map(product => <TableRow key={`qty-${product.name}`}>
-                          <TableCell>{product.name}</TableCell>
-                          <TableCell className="text-right font-medium">{product.quantity}</TableCell>
-                        </TableRow>)}
-                  </TableBody>
-                </Table>
+                <ScrollArea className="h-[400px]">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Producto</TableHead>
+                        <TableHead className="text-right">Cantidad</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {topSellingProducts.slice().sort((a, b) => b.quantity - a.quantity).map(product => <TableRow key={`qty-${product.name}`}>
+                            <TableCell>{product.name}</TableCell>
+                            <TableCell className="text-right font-medium">{product.quantity}</TableCell>
+                          </TableRow>)}
+                    </TableBody>
+                  </Table>
+                </ScrollArea>
               </div>
               <div>
                 <h3 className="text-md font-semibold mb-3 text-purple-700">Por Facturación</h3>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Producto</TableHead>
-                      <TableHead className="text-right">Facturación (S/)</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {topSellingProducts.slice().sort((a, b) => b.revenue - a.revenue).map(product => <TableRow key={`rev-${product.name}`}>
-                          <TableCell>{product.name}</TableCell>
-                          <TableCell className="text-right font-medium">S/ {product.revenue}</TableCell>
-                        </TableRow>)}
-                  </TableBody>
-                </Table>
+                <ScrollArea className="h-[400px]">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Producto</TableHead>
+                        <TableHead className="text-right">Facturación (S/)</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {topSellingProducts.slice().sort((a, b) => b.revenue - a.revenue).map(product => <TableRow key={`rev-${product.name}`}>
+                            <TableCell>{product.name}</TableCell>
+                            <TableCell className="text-right font-medium">S/ {product.revenue}</TableCell>
+                          </TableRow>)}
+                    </TableBody>
+                  </Table>
+                </ScrollArea>
               </div>
             </div>
           </CardContent>
