@@ -25,7 +25,7 @@ import {
   Tooltip, 
   Legend 
 } from 'recharts';
-import { Calendar, ChartBar, ChartPie, ClockIcon, DollarSign, Package, Receipt, Truck, Users } from 'lucide-react';
+import { Calendar, ChartBar, ChartPie, ClockIcon, DollarSign, Package, Receipt, Truck, Users, Check, Utensils } from 'lucide-react';
 
 // Sales by payment method data
 const paymentMethodData = [
@@ -56,6 +56,14 @@ const dailySalesData = [
   { day: "Vie", sales: 2800, orders: 95, averageTicket: 29.47, serviceTime: 22 },
   { day: "Sáb", sales: 3200, orders: 110, averageTicket: 29.09, serviceTime: 24 },
   { day: "Dom", sales: 2600, orders: 88, averageTicket: 29.55, serviceTime: 20 },
+];
+
+// Process time data (average time in minutes for each stage)
+const processTimeData = [
+  { name: "Aceptado", time: 3, icon: Check },
+  { name: "En Cocina", time: 12, icon: Utensils },
+  { name: "En Camino", time: 15, icon: Truck },
+  { name: "Entregado", time: 2, icon: Package }
 ];
 
 // Service time data
@@ -89,6 +97,11 @@ const COLORS = {
   positive: '#10B981',
   negative: '#EF4444',
   neutral: '#6B7280',
+  // Process stage colors
+  accepted: '#10B981',  // Soft green
+  kitchen: '#F97316',   // Bright orange
+  transit: '#0EA5E9',   // Ocean blue
+  delivered: '#8B5CF6', // Vivid purple
 };
 
 const SummaryCard = ({ title, value, description, icon: Icon, trend = null }) => (
@@ -183,6 +196,90 @@ const ServiceTimeCard = ({ avgTime, trend }) => (
     </CardContent>
   </Card>
 );
+
+const ProcessTimeChart = ({ data }) => {
+  // Find total time for percentage calculation
+  const totalTime = data.reduce((sum, process) => sum + process.time, 0);
+  
+  // Add percentage to each item
+  const dataWithPercentage = data.map(item => ({
+    ...item,
+    percentage: Math.round((item.time / totalTime) * 100)
+  }));
+  
+  // Get color based on process name
+  const getColor = (name) => {
+    switch (name) {
+      case "Aceptado": return COLORS.accepted;
+      case "En Cocina": return COLORS.kitchen;
+      case "En Camino": return COLORS.transit;
+      case "Entregado": return COLORS.delivered;
+      default: return COLORS.primary;
+    }
+  };
+  
+  return (
+    <Card className="col-span-1">
+      <CardHeader>
+        <CardTitle className="text-lg font-semibold text-purple-800">
+          Tiempo Promedio por Proceso
+        </CardTitle>
+        <CardDescription>Total: {totalTime} minutos</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="h-[300px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              layout="vertical"
+              data={dataWithPercentage}
+              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis type="number" unit=" min" />
+              <YAxis 
+                dataKey="name" 
+                type="category" 
+                width={100}
+                tick={({ x, y, payload }) => {
+                  const Icon = data.find(item => item.name === payload.value)?.icon;
+                  return (
+                    <g transform={`translate(${x},${y})`}>
+                      <text x={-10} y={4} textAnchor="end" fill="#666">
+                        {payload.value}
+                      </text>
+                      {Icon && (
+                        <foreignObject x={-35} y={-8} width={16} height={16}>
+                          <Icon className="h-4 w-4" />
+                        </foreignObject>
+                      )}
+                    </g>
+                  );
+                }}
+              />
+              <Tooltip
+                formatter={(value, name, props) => {
+                  if (name === "time") return [`${value} min (${props.payload.percentage}%)`, "Tiempo"];
+                  return [value, name];
+                }}
+              />
+              <Legend />
+              <Bar 
+                dataKey="time" 
+                name="Tiempo (min)" 
+                radius={[0, 4, 4, 0]}
+                barSize={30}
+              >
+                {dataWithPercentage.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={getColor(entry.name)} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
 
 const SalesDashboard = () => {
   // Calculate summary metrics
@@ -349,6 +446,11 @@ const SalesDashboard = () => {
             </div>
           </CardContent>
         </Card>
+      </div>
+
+      {/* Nuevo gráfico de tiempo promedio por proceso */}
+      <div className="grid grid-cols-1 gap-6 mb-6">
+        <ProcessTimeChart data={processTimeData} />
       </div>
 
       <div className="grid grid-cols-1 gap-6">
