@@ -80,18 +80,18 @@ const PlansConfig = () => {
           <h1 className="text-3xl font-bold text-gray-800">Planes y Pagos</h1>
           <p className="text-gray-600">Gestione su suscripción y pagos</p>
         </div>
-        <FileText className="h-10 w-10 text-delivery-600" />
+        <FileText className="h-10 w-10 text-purple-600" />
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="mb-6">
-          <TabsTrigger value="current">Plan Actual</TabsTrigger>
-          <TabsTrigger value="plans">Todos los Planes</TabsTrigger>
-          <TabsTrigger value="payment">Información de Pago</TabsTrigger>
+        <TabsList className="mb-6 bg-purple-100">
+          <TabsTrigger value="current" className="data-[state=active]:bg-purple-500 data-[state=active]:text-white">Plan Actual</TabsTrigger>
+          <TabsTrigger value="plans" className="data-[state=active]:bg-purple-500 data-[state=active]:text-white">Todos los Planes</TabsTrigger>
+          <TabsTrigger value="payment" className="data-[state=active]:bg-purple-500 data-[state=active]:text-white">Información de Pago</TabsTrigger>
         </TabsList>
 
         <TabsContent value="current">
-          <Card>
+          <Card className="border-purple-100">
             <CardHeader>
               <CardTitle>Plan Actual: Básico</CardTitle>
               <CardDescription>Detalles de tu suscripción actual</CardDescription>
@@ -103,7 +103,7 @@ const PlansConfig = () => {
                   <p className="text-sm text-gray-500">Facturación mensual</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-2xl font-bold">€29<span className="text-sm font-normal text-gray-500">/mes</span></p>
+                  <p className="text-2xl font-bold text-purple-900">€29<span className="text-sm font-normal text-gray-500">/mes</span></p>
                 </div>
               </div>
 
@@ -118,7 +118,7 @@ const PlansConfig = () => {
                     <span>29 días restantes</span>
                     <span>15 junio</span>
                   </div>
-                  <Progress value={40} className="h-2" />
+                  <Progress value={40} className="h-2 bg-purple-100 [&>div]:bg-purple-600" />
                 </div>
               </div>
 
@@ -133,7 +133,7 @@ const PlansConfig = () => {
               </div>
             </CardContent>
             <CardFooter className="flex flex-col sm:flex-row gap-3 justify-end">
-              <Button variant="outline" onClick={() => setActiveTab('plans')}>
+              <Button variant="outline" onClick={() => setActiveTab('plans')} className="border-purple-300 hover:bg-purple-50">
                 Cambiar Plan
               </Button>
               <Button variant="outline" className="bg-white text-red-600 hover:bg-red-50 hover:text-red-700">
@@ -146,10 +146,10 @@ const PlansConfig = () => {
         <TabsContent value="plans">
           <div className="grid gap-6 md:grid-cols-3">
             {planOptions.map((plan) => (
-              <Card key={plan.id} className={`flex flex-col ${plan.isPopular ? 'border-delivery-500 relative' : ''}`}>
+              <Card key={plan.id} className={`flex flex-col ${plan.isPopular ? 'border-purple-500 relative' : ''}`}>
                 {plan.isPopular && (
                   <div className="absolute -top-3 left-0 right-0 flex justify-center">
-                    <Badge className="bg-delivery-600">Popular</Badge>
+                    <Badge className="bg-purple-600">Popular</Badge>
                   </div>
                 )}
                 {plan.isCurrent && (
@@ -160,7 +160,7 @@ const PlansConfig = () => {
                 <CardHeader>
                   <CardTitle>{plan.name}</CardTitle>
                   <CardDescription>
-                    <span className="text-3xl font-bold">€{plan.price}</span>
+                    <span className="text-3xl font-bold text-purple-900">€{plan.price}</span>
                     <span className="text-sm">/{plan.billingPeriod}</span>
                   </CardDescription>
                 </CardHeader>
@@ -178,7 +178,7 @@ const PlansConfig = () => {
                           strokeWidth="2"
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          className="text-delivery-600"
+                          className="text-purple-600"
                         >
                           <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                           <polyline points="22 4 12 14.01 9 11.01"></polyline>
@@ -191,7 +191,7 @@ const PlansConfig = () => {
                 <CardFooter>
                   <Button 
                     onClick={() => handleSelectPlan(plan.id)}
-                    className={`w-full ${plan.isCurrent ? 'bg-gray-300 hover:bg-gray-300 cursor-not-allowed' : plan.isPopular ? 'bg-delivery-600 hover:bg-delivery-700' : 'bg-delivery-500 hover:bg-delivery-600'}`}
+                    className={`w-full ${plan.isCurrent ? 'bg-gray-300 hover:bg-gray-300 cursor-not-allowed' : plan.isPopular ? 'bg-purple-600 hover:bg-purple-700' : 'bg-purple-500 hover:bg-purple-600'}`}
                     disabled={plan.isCurrent}
                   >
                     {plan.isCurrent ? 'Plan Actual' : 'Seleccionar Plan'}
@@ -203,7 +203,7 @@ const PlansConfig = () => {
         </TabsContent>
 
         <TabsContent value="payment">
-          <Card>
+          <Card className="border-purple-100">
             <CardHeader>
               <CardTitle>Información de Pago</CardTitle>
               <CardDescription>Gestione sus métodos de pago y facturas</CardDescription>
@@ -211,9 +211,9 @@ const PlansConfig = () => {
             <CardContent className="space-y-6">
               <div>
                 <h3 className="text-lg font-medium mb-3">Método de pago actual</h3>
-                <div className="flex items-center gap-4 p-4 border rounded-md">
-                  <div className="bg-gray-100 rounded p-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-700">
+                <div className="flex items-center gap-4 p-4 border border-purple-100 rounded-md">
+                  <div className="bg-purple-50 rounded p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-700">
                       <rect x="2" y="5" width="20" height="14" rx="2" />
                       <line x1="2" x2="22" y1="10" y2="10" />
                     </svg>
@@ -222,23 +222,23 @@ const PlansConfig = () => {
                     <p className="font-medium">Visa terminada en 4242</p>
                     <p className="text-sm text-gray-500">Expira 12/2026</p>
                   </div>
-                  <Button variant="ghost" className="ml-auto">Editar</Button>
+                  <Button variant="ghost" className="ml-auto text-purple-600 hover:text-purple-800 hover:bg-purple-50">Editar</Button>
                 </div>
               </div>
 
               <div>
                 <h3 className="text-lg font-medium mb-3">Historial de facturación</h3>
-                <div className="border rounded-md overflow-hidden">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                <div className="border border-purple-100 rounded-md overflow-hidden">
+                  <table className="min-w-full divide-y divide-purple-200">
+                    <thead className="bg-purple-50">
                       <tr>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Monto</th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
-                        <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Factura</th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-purple-800 uppercase tracking-wider">Fecha</th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-purple-800 uppercase tracking-wider">Monto</th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-purple-800 uppercase tracking-wider">Estado</th>
+                        <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-purple-800 uppercase tracking-wider">Factura</th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-white divide-y divide-purple-100">
                       <tr>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">15 May, 2025</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">€29.00</td>
@@ -246,7 +246,7 @@ const PlansConfig = () => {
                           <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Pagado</span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <a href="#" className="text-delivery-600 hover:text-delivery-800">Descargar</a>
+                          <a href="#" className="text-purple-600 hover:text-purple-800">Descargar</a>
                         </td>
                       </tr>
                       <tr>
@@ -256,7 +256,7 @@ const PlansConfig = () => {
                           <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Pagado</span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <a href="#" className="text-delivery-600 hover:text-delivery-800">Descargar</a>
+                          <a href="#" className="text-purple-600 hover:text-purple-800">Descargar</a>
                         </td>
                       </tr>
                       <tr>
@@ -266,7 +266,7 @@ const PlansConfig = () => {
                           <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Pagado</span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <a href="#" className="text-delivery-600 hover:text-delivery-800">Descargar</a>
+                          <a href="#" className="text-purple-600 hover:text-purple-800">Descargar</a>
                         </td>
                       </tr>
                     </tbody>
