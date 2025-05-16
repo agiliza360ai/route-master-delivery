@@ -97,11 +97,11 @@ const COLORS = {
   positive: '#10B981',
   negative: '#EF4444',
   neutral: '#6B7280',
-  // Process stage colors
-  accepted: '#10B981',  // Soft green
-  kitchen: '#F97316',   // Bright orange
-  transit: '#0EA5E9',   // Ocean blue
-  delivered: '#8B5CF6', // Vivid purple
+  // Process stage colors - Updated to use purple tones
+  accepted: '#D6BCFA',  // Light purple
+  kitchen: '#9B87F5',   // Primary purple
+  transit: '#7E69AB',   // Secondary purple
+  delivered: '#6E59A5', // Tertiary purple
 };
 
 const SummaryCard = ({ title, value, description, icon: Icon, trend = null }) => (
@@ -201,11 +201,16 @@ const ProcessTimeChart = ({ data }) => {
   // Find total time for percentage calculation
   const totalTime = data.reduce((sum, process) => sum + process.time, 0);
   
-  // Add percentage to each item
-  const dataWithPercentage = data.map(item => ({
-    ...item,
-    percentage: Math.round((item.time / totalTime) * 100)
-  }));
+  // Add percentage to each item and cumulative time for line chart
+  let cumulativeTime = 0;
+  const dataWithPercentage = data.map(item => {
+    cumulativeTime += item.time;
+    return {
+      ...item,
+      percentage: Math.round((item.time / totalTime) * 100),
+      cumulative: cumulativeTime
+    };
+  });
   
   // Get color based on process name
   const getColor = (name) => {
@@ -229,51 +234,68 @@ const ProcessTimeChart = ({ data }) => {
       <CardContent>
         <div className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              layout="vertical"
+            <LineChart
               data={dataWithPercentage}
               margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
             >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis type="number" unit=" min" />
-              <YAxis 
+              <XAxis 
                 dataKey="name" 
-                type="category" 
-                width={100}
                 tick={({ x, y, payload }) => {
                   const Icon = data.find(item => item.name === payload.value)?.icon;
                   return (
                     <g transform={`translate(${x},${y})`}>
-                      <text x={-10} y={4} textAnchor="end" fill="#666">
+                      <text x={0} y={20} textAnchor="middle" fill="#666">
                         {payload.value}
                       </text>
                       {Icon && (
-                        <foreignObject x={-35} y={-8} width={16} height={16}>
+                        <foreignObject x={-8} y={25} width={16} height={16}>
                           <Icon className="h-4 w-4" />
                         </foreignObject>
                       )}
                     </g>
                   );
                 }}
+                height={50}
               />
+              <YAxis unit=" min" />
               <Tooltip
                 formatter={(value, name, props) => {
                   if (name === "time") return [`${value} min (${props.payload.percentage}%)`, "Tiempo"];
+                  if (name === "cumulative") return [`${value} min (acumulado)`, "Tiempo Total"];
                   return [value, name];
                 }}
               />
               <Legend />
-              <Bar 
+              <Line 
+                type="monotone" 
                 dataKey="time" 
                 name="Tiempo (min)" 
-                radius={[0, 4, 4, 0]}
-                barSize={30}
-              >
-                {dataWithPercentage.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={getColor(entry.name)} />
-                ))}
-              </Bar>
-            </BarChart>
+                stroke={COLORS.primary}
+                strokeWidth={3}
+                dot={(props) => {
+                  const { cx, cy, payload } = props;
+                  return (
+                    <circle 
+                      cx={cx} 
+                      cy={cy} 
+                      r={6} 
+                      fill={getColor(payload.name)} 
+                      stroke="white"
+                      strokeWidth={2}
+                    />
+                  );
+                }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="cumulative" 
+                name="Tiempo Acumulado" 
+                stroke={COLORS.tertiary}
+                strokeDasharray="5 5"
+                strokeWidth={2}
+              />
+            </LineChart>
           </ResponsiveContainer>
         </div>
       </CardContent>
