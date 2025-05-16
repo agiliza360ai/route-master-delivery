@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FileText, Calendar, Book } from 'lucide-react';
+import { FileText, Calendar, Book, Coins } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Progress } from '@/components/ui/progress';
 
@@ -66,6 +66,11 @@ const PlansConfig = () => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('current');
   
+  // Token usage information
+  const totalTokens = 5000;
+  const usedTokens = 2350;
+  const tokenPercentage = Math.round((usedTokens / totalTokens) * 100);
+  
   const handleSelectPlan = (planId: string) => {
     toast({
       title: "Plan seleccionado",
@@ -104,6 +109,38 @@ const PlansConfig = () => {
                 </div>
                 <div className="text-right">
                   <p className="text-2xl font-bold text-purple-900">€29<span className="text-sm font-normal text-gray-500">/mes</span></p>
+                </div>
+              </div>
+
+              {/* Token usage section */}
+              <div className="space-y-3 border-b pb-4">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <Coins className="h-5 w-5 text-purple-600" />
+                    <p className="font-medium">Uso de tokens</p>
+                  </div>
+                  <span className="text-sm font-medium text-purple-800">
+                    {usedTokens} / {totalTokens}
+                  </span>
+                </div>
+                <div className="space-y-1">
+                  <Progress 
+                    value={tokenPercentage} 
+                    className="h-2 bg-purple-100 [&>div]:bg-purple-600" 
+                  />
+                  <div className="flex justify-between text-xs text-gray-500">
+                    <span>{tokenPercentage}% utilizado</span>
+                    <span>{totalTokens - usedTokens} tokens restantes</span>
+                  </div>
+                </div>
+                <div className="mt-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="text-xs h-8 border-purple-300 hover:bg-purple-50 text-purple-700"
+                  >
+                    Comprar tokens adicionales
+                  </Button>
                 </div>
               </div>
 
