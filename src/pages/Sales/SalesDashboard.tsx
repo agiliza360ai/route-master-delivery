@@ -1,7 +1,5 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { 
   Table,
@@ -51,13 +49,13 @@ const orderTypeData = [
 
 // Daily sales data
 const dailySalesData = [
-  { day: "Lun", sales: 1200, orders: 45, averageTicket: 26.67 },
-  { day: "Mar", sales: 1800, orders: 65, averageTicket: 27.69 },
-  { day: "Mié", sales: 1500, orders: 55, averageTicket: 27.27 },
-  { day: "Jue", sales: 2200, orders: 78, averageTicket: 28.21 },
-  { day: "Vie", sales: 2800, orders: 95, averageTicket: 29.47 },
-  { day: "Sáb", sales: 3200, orders: 110, averageTicket: 29.09 },
-  { day: "Dom", sales: 2600, orders: 88, averageTicket: 29.55 },
+  { day: "Lun", sales: 1200, orders: 45, averageTicket: 26.67, serviceTime: 20 },
+  { day: "Mar", sales: 1800, orders: 65, averageTicket: 27.69, serviceTime: 18 },
+  { day: "Mié", sales: 1500, orders: 55, averageTicket: 27.27, serviceTime: 19 },
+  { day: "Jue", sales: 2200, orders: 78, averageTicket: 28.21, serviceTime: 17 },
+  { day: "Vie", sales: 2800, orders: 95, averageTicket: 29.47, serviceTime: 22 },
+  { day: "Sáb", sales: 3200, orders: 110, averageTicket: 29.09, serviceTime: 24 },
+  { day: "Dom", sales: 2600, orders: 88, averageTicket: 29.55, serviceTime: 20 },
 ];
 
 // Service time data
@@ -166,12 +164,43 @@ const PieChartComponent = ({ data, colors, title, dataKey = "value", nameKey = "
   </Card>
 );
 
+const ServiceTimeCard = ({ avgTime, trend }) => (
+  <Card className="col-span-1">
+    <CardHeader className="flex flex-row items-center justify-between pb-2">
+      <CardTitle className="text-sm font-medium text-muted-foreground">
+        Tiempo de Atención
+      </CardTitle>
+      <ClockIcon className="h-4 w-4 text-purple-600" />
+    </CardHeader>
+    <CardContent>
+      <div className="flex flex-col items-center text-center">
+        <div className="text-3xl font-bold text-purple-900">{avgTime.toFixed(2)} min</div>
+        <p className="text-xs text-muted-foreground mt-1">Promedio</p>
+        <div className={`text-xs mt-2 flex items-center ${trend.positive ? 'text-green-600' : 'text-red-500'}`}>
+          {trend.positive ? '↓' : '↑'} {Math.abs(trend.value).toFixed(1)}% vs. objetivo
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+);
+
 const SalesDashboard = () => {
   // Calculate summary metrics
   const totalSales = dailySalesData.reduce((sum, day) => sum + day.sales, 0);
   const totalOrders = dailySalesData.reduce((sum, day) => sum + day.orders, 0);
   const avgTicket = totalSales / totalOrders;
   const avgServiceTime = serviceTimeData.reduce((sum, day) => sum + day.avgTime, 0) / serviceTimeData.length;
+  
+  // Calcular el tiempo promedio de atención por orden considerando también el volumen de órdenes
+  const weightedServiceTime = dailySalesData.reduce((sum, day) => sum + (day.serviceTime * day.orders), 0);
+  const avgServiceTimePerOrder = weightedServiceTime / totalOrders;
+
+  // Tendencia vs objetivo (asumimos un objetivo de 18.5 minutos)
+  const targetServiceTime = 18.5;
+  const serviceTimeTrend = {
+    value: ((avgServiceTimePerOrder - targetServiceTime) / targetServiceTime) * 100,
+    positive: avgServiceTimePerOrder <= targetServiceTime
+  };
   
   return (
     <div className="container mx-auto px-4 py-8">
@@ -202,12 +231,9 @@ const SalesDashboard = () => {
           icon={ChartBar}
           trend={{ positive: true, value: 3.7, text: "vs. semana anterior" }}
         />
-        <SummaryCard 
-          title="Tiempo de Atención" 
-          value={`${avgServiceTime} min`}
-          description="Promedio" 
-          icon={ClockIcon}
-          trend={{ positive: false, value: 5.2, text: "vs. objetivo" }}
+        <ServiceTimeCard 
+          avgTime={avgServiceTimePerOrder}
+          trend={serviceTimeTrend}
         />
       </div>
 
@@ -315,7 +341,7 @@ const SalesDashboard = () => {
         
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-purple-800">Tiempos de Atención</CardTitle>
+            <CardTitle className="text-lg font-semibold text-purple-800">Tiempos de Atención por Día</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-[300px]">
