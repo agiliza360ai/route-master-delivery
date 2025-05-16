@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { 
@@ -319,57 +319,59 @@ const SalesDashboard = () => {
       <div className="grid grid-cols-1 gap-6">
         <Card>
           <CardHeader>
-            <Tabs defaultValue="quantity" className="w-full">
-              <div className="flex justify-between items-center">
-                <CardTitle className="text-lg font-semibold text-purple-800">Productos Destacados</CardTitle>
+            <div className="flex justify-between items-center">
+              <CardTitle className="text-lg font-semibold text-purple-800">Productos Destacados</CardTitle>
+              <Tabs defaultValue="quantity" className="w-[400px]">
                 <TabsList>
                   <TabsTrigger value="quantity">Por Cantidad</TabsTrigger>
                   <TabsTrigger value="revenue">Por Facturación</TabsTrigger>
                 </TabsList>
-              </div>
-            </Tabs>
+                
+                <TabsContent value="quantity" className="mt-4">
+                  <div className="h-[300px]">
+                    <ChartContainer 
+                      config={{ 
+                        quantity: { color: COLORS.primary }
+                      }}
+                    >
+                      <BarChart 
+                        data={topSellingProducts.slice().sort((a, b) => b.quantity - a.quantity)} 
+                        layout="vertical"
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis type="number" />
+                        <YAxis type="category" dataKey="name" width={150} />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Bar dataKey="quantity" name="Cantidad vendida" fill="var(--color-quantity)" />
+                      </BarChart>
+                    </ChartContainer>
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="revenue" className="mt-4">
+                  <div className="h-[300px]">
+                    <ChartContainer 
+                      config={{ 
+                        revenue: { color: COLORS.secondary }
+                      }}
+                    >
+                      <BarChart 
+                        data={topSellingProducts.slice().sort((a, b) => b.revenue - a.revenue)} 
+                        layout="vertical"
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis type="number" />
+                        <YAxis type="category" dataKey="name" width={150} />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Bar dataKey="revenue" name="Facturación (S/)" fill="var(--color-revenue)" />
+                      </BarChart>
+                    </ChartContainer>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </div>
           </CardHeader>
           <CardContent>
-            <TabsContent value="quantity" className="mt-0 pt-0">
-              <div className="h-[300px]">
-                <ChartContainer 
-                  config={{ 
-                    quantity: { color: COLORS.primary }
-                  }}
-                >
-                  <BarChart 
-                    data={topSellingProducts.slice().sort((a, b) => b.quantity - a.quantity)} 
-                    layout="vertical"
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number" />
-                    <YAxis type="category" dataKey="name" width={150} />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <Bar dataKey="quantity" name="Cantidad vendida" fill="var(--color-quantity)" />
-                  </BarChart>
-                </ChartContainer>
-              </div>
-            </TabsContent>
-            <TabsContent value="revenue" className="mt-0 pt-0">
-              <div className="h-[300px]">
-                <ChartContainer 
-                  config={{ 
-                    revenue: { color: COLORS.secondary }
-                  }}
-                >
-                  <BarChart 
-                    data={topSellingProducts.slice().sort((a, b) => b.revenue - a.revenue)} 
-                    layout="vertical"
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number" />
-                    <YAxis type="category" dataKey="name" width={150} />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <Bar dataKey="revenue" name="Facturación (S/)" fill="var(--color-revenue)" />
-                  </BarChart>
-                </ChartContainer>
-              </div>
-            </TabsContent>
           </CardContent>
         </Card>
       </div>
