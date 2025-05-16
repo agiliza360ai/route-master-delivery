@@ -8,7 +8,8 @@ import {
   Badge,
   Book,
   Calendar,
-  Ticket
+  Ticket,
+  Users
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -33,6 +34,7 @@ const ConfigurationSidebar = () => {
   const configItems = [
     { title: "Datos de Marca", path: "/config/brand", icon: Badge },
     { title: "Planes y Pagos", path: "/config/plans", icon: FileText },
+    { title: "Usuarios", path: "/users", icon: Users },
     { title: "Manuales", path: "/config/manuals", icon: Book },
     { title: "Incidencias", path: "/config/incidents", icon: Ticket }
   ];

@@ -31,7 +31,6 @@ const App = () => (
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/sales" element={<SalesDashboard />} />
-            <Route path="/users" element={<UsersManagement />} />
             
             <Route path="/config" element={<ConfigLayout />}>
               <Route index element={<ConfigIndex />} />
@@ -40,6 +39,8 @@ const App = () => (
               <Route path="manuals" element={<ManualsConfig />} />
               <Route path="incidents" element={<IncidentsConfig />} />
             </Route>
+            
+            <Route path="/users" element={<UsersManagement />} />
           </Route>
           
           <Route path="*" element={<NotFound />} />
