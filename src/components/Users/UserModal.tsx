@@ -59,7 +59,7 @@ export const UserModal: React.FC<UserModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={open => !open && onClose()}>
-      <DialogContent className="max-w-2xl p-6">
+      <DialogContent className="max-w-lg p-6">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-purple-800 mb-1">
             {user ? 'Editar Usuario' : 'Crear Nuevo Usuario'}
@@ -67,142 +67,136 @@ export const UserModal: React.FC<UserModalProps> = ({
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 mt-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* Personal Information */}
-              <div className="space-y-5">
-                <div className="border-b border-purple-200 pb-2">
-                  <h3 className="text-md font-semibold text-purple-700">Información Personal</h3>
-                </div>
-                
-                <FormField 
-                  control={form.control} 
-                  name="name" 
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-700">Nombre completo</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Nombre y apellido" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} 
-                />
-                
-                <FormField 
-                  control={form.control} 
-                  name="email" 
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-700">Correo electrónico</FormLabel>
-                      <FormControl>
-                        <Input type="email" placeholder="correo@ejemplo.com" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} 
-                />
-                
-                <FormField 
-                  control={form.control} 
-                  name="phone" 
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-700">Teléfono</FormLabel>
-                      <FormControl>
-                        <Input placeholder="+51 999 999 999" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} 
-                />
-                
-                <FormField 
-                  control={form.control} 
-                  name="address" 
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-700">Dirección</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="Dirección completa" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} 
-                />
-              </div>
-              
-              {/* System Information */}
-              <div className="space-y-5">
-                <div className="border-b border-purple-200 pb-2">
-                  <h3 className="text-md font-semibold text-purple-700">Información del Sistema</h3>
-                </div>
-                
-                <FormField 
-                  control={form.control} 
-                  name="position" 
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-700">Cargo</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Cargo en la empresa" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} 
-                />
-                
-                <FormField 
-                  control={form.control} 
-                  name="role" 
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-700">Rol en el sistema</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Seleccionar rol" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="Administrador">Administrador</SelectItem>
-                          <SelectItem value="Usuario">Usuario</SelectItem>
-                          <SelectItem value="Supervisor">Supervisor</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )} 
-                />
-                
-                <FormField 
-                  control={form.control} 
-                  name="status" 
-                  render={({ field }) => (
-                    <FormItem className="space-y-3">
-                      <FormLabel className="text-gray-700">Estado</FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="flex gap-4"
-                        >
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="active" id="active" />
-                            <Label htmlFor="active" className="text-sm font-medium">Activo</Label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="inactive" id="inactive" />
-                            <Label htmlFor="inactive" className="text-sm font-medium">Inactivo</Label>
-                          </div>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} 
-                />
-              </div>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-5 mt-4">
+            {/* Personal Information */}
+            <div className="border-b border-purple-200 pb-2">
+              <h3 className="text-md font-semibold text-purple-700">Información Personal</h3>
             </div>
+            
+            <FormField 
+              control={form.control} 
+              name="name" 
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-700">Nombre completo</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Nombre y apellido" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} 
+            />
+            
+            <FormField 
+              control={form.control} 
+              name="email" 
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-700">Correo electrónico</FormLabel>
+                  <FormControl>
+                    <Input type="email" placeholder="correo@ejemplo.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} 
+            />
+            
+            <FormField 
+              control={form.control} 
+              name="phone" 
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-700">Teléfono</FormLabel>
+                  <FormControl>
+                    <Input placeholder="+51 999 999 999" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} 
+            />
+            
+            <FormField 
+              control={form.control} 
+              name="address" 
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-700">Dirección</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Dirección completa" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} 
+            />
+
+            {/* System Information */}
+            <div className="border-b border-purple-200 pb-2 pt-4">
+              <h3 className="text-md font-semibold text-purple-700">Información del Sistema</h3>
+            </div>
+            
+            <FormField 
+              control={form.control} 
+              name="position" 
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-700">Cargo</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Cargo en la empresa" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} 
+            />
+            
+            <FormField 
+              control={form.control} 
+              name="role" 
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-700">Rol en el sistema</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Seleccionar rol" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Administrador">Administrador</SelectItem>
+                      <SelectItem value="Usuario">Usuario</SelectItem>
+                      <SelectItem value="Supervisor">Supervisor</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )} 
+            />
+            
+            <FormField 
+              control={form.control} 
+              name="status" 
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel className="text-gray-700">Estado</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex gap-4"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="active" id="active" />
+                        <Label htmlFor="active" className="text-sm font-medium">Activo</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="inactive" id="inactive" />
+                        <Label htmlFor="inactive" className="text-sm font-medium">Inactivo</Label>
+                      </div>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} 
+            />
 
             <Separator className="my-4" />
 
