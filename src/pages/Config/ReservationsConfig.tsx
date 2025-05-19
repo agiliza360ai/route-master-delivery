@@ -1,8 +1,9 @@
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, List } from 'lucide-react';
+import { Calendar, LayoutGrid, List } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import TableSelector from './Reservations/TableSelector';
 
 const ConfigItem = ({ 
   title, 
@@ -30,30 +31,6 @@ const ConfigItem = ({
   </Link>
 );
 
-const ReservationsConfig = () => {
-  return (
-    <div>
-      <h1 className="text-3xl font-bold text-gray-800 mb-2">Reservas</h1>
-      <p className="text-gray-600 mb-8">Gestione las mesas y reservaciones de su establecimiento</p>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ConfigItem 
-          title="Mesas" 
-          description="Gestione las mesas disponibles de su establecimiento" 
-          icon={Table} 
-          href="/config/reservations/tables" 
-        />
-        <ConfigItem 
-          title="Reservaciones" 
-          description="Consulte y administre las reservas de sus clientes" 
-          icon={List} 
-          href="/config/reservations/list" 
-        />
-      </div>
-    </div>
-  );
-};
-
 // Simple Table icon component since it's not available in lucide-react
 const Table = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -75,5 +52,52 @@ const Table = (props: React.SVGProps<SVGSVGElement>) => (
     <line x1="17" y1="5" x2="17" y2="8" />
   </svg>
 );
+
+const ReservationsConfig = () => {
+  return (
+    <div>
+      <h1 className="text-3xl font-bold text-gray-800 mb-2">Reservas</h1>
+      <p className="text-gray-600 mb-4">Gestione las mesas y reservaciones de su establecimiento</p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <ConfigItem 
+          title="Administrar Mesas" 
+          description="Gestione las mesas disponibles de su establecimiento" 
+          icon={Table} 
+          href="/config/reservations/tables" 
+        />
+        <ConfigItem 
+          title="Listado de Reservaciones" 
+          description="Consulte y administre las reservas de sus clientes" 
+          icon={List} 
+          href="/config/reservations/list" 
+        />
+      </div>
+      
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            <span>Piso Principal</span>
+            <div className="flex gap-2">
+              <Link to="/config/reservations/tables">
+                <button className="p-2 rounded-md bg-purple-100 text-purple-600 hover:bg-purple-200">
+                  <LayoutGrid size={18} />
+                </button>
+              </Link>
+              <Link to="/config/reservations/list">
+                <button className="p-2 rounded-md bg-purple-100 text-purple-600 hover:bg-purple-200">
+                  <List size={18} />
+                </button>
+              </Link>
+            </div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <TableSelector />
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
 
 export default ReservationsConfig;
