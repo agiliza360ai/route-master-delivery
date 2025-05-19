@@ -9,7 +9,8 @@ import {
   Book,
   Calendar,
   Ticket,
-  Users
+  Users,
+  ImageIcon
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -36,6 +37,7 @@ const ConfigurationSidebar = () => {
     { title: "Planes y Pagos", path: "/config/plans", icon: FileText },
     { title: "Usuarios", path: "/users", icon: Users },
     { title: "Reservas", path: "/config/reservations", icon: Calendar },
+    { title: "Galería", path: "/config/gallery", icon: ImageIcon },
     { title: "Manuales", path: "/config/manuals", icon: Book },
     { title: "Incidencias", path: "/config/incidents", icon: Ticket }
   ];

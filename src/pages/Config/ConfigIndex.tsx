@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge, FileText, Book, Ticket } from 'lucide-react';
+import { Badge, FileText, Book, Ticket, ImageIcon, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const ConfigItem = ({ 
@@ -60,6 +60,18 @@ const ConfigIndex = () => {
           description="Reporte y gestione incidencias del sistema" 
           icon={Ticket} 
           href="/config/incidents" 
+        />
+        <ConfigItem 
+          title="Galería" 
+          description="Gestione las imágenes de su negocio" 
+          icon={ImageIcon} 
+          href="/config/gallery" 
+        />
+        <ConfigItem 
+          title="Reservas" 
+          description="Administre las reservas y mesas de su negocio" 
+          icon={Calendar} 
+          href="/config/reservations" 
         />
       </div>
     </div>

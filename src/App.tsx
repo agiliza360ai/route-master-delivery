@@ -19,6 +19,7 @@ import TablesList from "./pages/Config/Tables/TablesList";
 import ReservationsList from "./pages/Config/Reservations/ReservationsList";
 import SalesDashboard from "./pages/Sales/SalesDashboard";
 import UsersManagement from "./pages/Users/UsersManagement";
+import GalleryConfig from "./pages/Config/GalleryConfig";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,7 @@ const App = () => (
               <Route path="plans" element={<PlansConfig />} />
               <Route path="manuals" element={<ManualsConfig />} />
               <Route path="incidents" element={<IncidentsConfig />} />
+              <Route path="gallery" element={<GalleryConfig />} />
               <Route path="reservations" element={<ReservationsConfig />} />
               <Route path="reservations/tables" element={<TablesList />} />
               <Route path="reservations/list" element={<ReservationsList />} />
