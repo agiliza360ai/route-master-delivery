@@ -14,6 +14,9 @@ import BrandConfig from "./pages/Config/BrandConfig";
 import PlansConfig from "./pages/Config/PlansConfig";
 import ManualsConfig from "./pages/Config/ManualsConfig";
 import IncidentsConfig from "./pages/Config/IncidentsConfig";
+import ReservationsConfig from "./pages/Config/ReservationsConfig";
+import TablesList from "./pages/Config/Tables/TablesList";
+import ReservationsList from "./pages/Config/Reservations/ReservationsList";
 import SalesDashboard from "./pages/Sales/SalesDashboard";
 import UsersManagement from "./pages/Users/UsersManagement";
 
@@ -38,6 +41,9 @@ const App = () => (
               <Route path="plans" element={<PlansConfig />} />
               <Route path="manuals" element={<ManualsConfig />} />
               <Route path="incidents" element={<IncidentsConfig />} />
+              <Route path="reservations" element={<ReservationsConfig />} />
+              <Route path="reservations/tables" element={<TablesList />} />
+              <Route path="reservations/list" element={<ReservationsList />} />
             </Route>
             
             <Route path="/users" element={<UsersManagement />} />
