@@ -148,31 +148,6 @@ const TableBoard: React.FC = () => {
           <h2 className="text-2xl font-bold text-gray-800">Distribución de Mesas</h2>
           <p className="text-gray-600">Organiza la distribución de las mesas en tu establecimiento</p>
         </div>
-        <div className="flex gap-2">
-          <Button 
-            onClick={handleAddTable}
-            className="bg-purple-600 hover:bg-purple-700"
-          >
-            <Plus className="mr-2 h-4 w-4" /> Agregar Mesa
-          </Button>
-          <Button
-            onClick={handleUndo}
-            disabled={historyIndex === 0}
-            variant="outline"
-            className="border-purple-200 text-purple-700 hover:bg-purple-50 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <Undo className="mr-2 h-4 w-4" />
-            Deshacer
-          </Button>
-          <Button
-            variant={isEditMode ? "default" : "outline"}
-            onClick={() => setIsEditMode(!isEditMode)}
-            className={isEditMode ? "bg-purple-600 hover:bg-purple-700" : "border-purple-200 text-purple-700 hover:bg-purple-50"}
-          >
-            <Edit3 className="mr-2 h-4 w-4" />
-            {isEditMode ? 'Finalizar Edición' : 'Modificar Distribución'}
-          </Button>
-        </div>
       </div>
 
       <div className="flex gap-4 items-center">
@@ -205,15 +180,42 @@ const TableBoard: React.FC = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Settings className="h-5 w-5 text-purple-600" />
-            {getCurrentZoneName()}
-            {isEditMode && (
-              <span className="text-sm font-normal text-purple-600 bg-purple-100 px-2 py-1 rounded">
-                Modo Edición Activo - Arrastra las mesas y redimensiona las rectangulares
-              </span>
-            )}
-          </CardTitle>
+          <div className="flex justify-between items-center">
+            <CardTitle className="flex items-center gap-2">
+              <Settings className="h-5 w-5 text-purple-600" />
+              {getCurrentZoneName()}
+              {isEditMode && (
+                <span className="text-sm font-normal text-purple-600 bg-purple-100 px-2 py-1 rounded">
+                  Modo Edición Activo - Arrastra las mesas y redimensiona las rectangulares
+                </span>
+              )}
+            </CardTitle>
+            <div className="flex gap-2">
+              <Button 
+                onClick={handleAddTable}
+                className="bg-purple-600 hover:bg-purple-700"
+              >
+                <Plus className="mr-2 h-4 w-4" /> Agregar Mesa
+              </Button>
+              <Button
+                onClick={handleUndo}
+                disabled={historyIndex === 0}
+                variant="outline"
+                className="border-purple-200 text-purple-700 hover:bg-purple-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Undo className="mr-2 h-4 w-4" />
+                Deshacer
+              </Button>
+              <Button
+                variant={isEditMode ? "default" : "outline"}
+                onClick={() => setIsEditMode(!isEditMode)}
+                className={isEditMode ? "bg-purple-600 hover:bg-purple-700" : "border-purple-200 text-purple-700 hover:bg-purple-50"}
+              >
+                <Edit3 className="mr-2 h-4 w-4" />
+                {isEditMode ? 'Finalizar Edición' : 'Modificar Distribución'}
+              </Button>
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
           <div 
