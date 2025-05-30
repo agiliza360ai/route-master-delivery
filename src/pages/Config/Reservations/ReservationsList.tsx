@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table';
@@ -11,11 +10,11 @@ import ReservationModal from './ReservationModal';
 
 // Mock data for tables and reservations
 const MOCK_TABLES: TableType[] = [
-  { id: '1', name: 'Mesa 01', capacity: 2, status: 'available' },
-  { id: '2', name: 'Mesa 02', capacity: 4, status: 'occupied' },
-  { id: '3', name: 'Mesa 03', capacity: 6, status: 'reserved' },
-  { id: '4', name: 'Mesa 04', capacity: 8, status: 'maintenance' },
-  { id: '5', name: 'Mesa 05', capacity: 4, status: 'available' },
+  { id: '1', name: 'Mesa 01', capacity: 2, status: 'available', shape: 'round', size: 'small' },
+  { id: '2', name: 'Mesa 02', capacity: 4, status: 'occupied', shape: 'rectangular', size: 'medium' },
+  { id: '3', name: 'Mesa 03', capacity: 6, status: 'reserved', shape: 'round', size: 'large' },
+  { id: '4', name: 'Mesa 04', capacity: 8, status: 'maintenance', shape: 'rectangular', size: 'large' },
+  { id: '5', name: 'Mesa 05', capacity: 4, status: 'available', shape: 'round', size: 'medium' },
 ];
 
 const MOCK_RESERVATIONS: Reservation[] = [

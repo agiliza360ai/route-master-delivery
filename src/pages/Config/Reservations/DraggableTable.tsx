@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { Table as TableType } from '@/types/reservation';
 import { Edit, Trash2, Users } from 'lucide-react';
@@ -78,7 +77,7 @@ const DraggableTable: React.FC<DraggableTableProps> = ({
   };
 
   const handleResizeMouseDown = (e: React.MouseEvent) => {
-    if (!isEditMode || !table.shape === 'rectangular') return;
+    if (!isEditMode || table.shape !== 'rectangular') return;
     
     e.preventDefault();
     e.stopPropagation();
