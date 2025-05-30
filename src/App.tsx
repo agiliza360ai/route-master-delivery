@@ -20,6 +20,7 @@ import ReservationsList from "./pages/Config/Reservations/ReservationsList";
 import SalesDashboard from "./pages/Sales/SalesDashboard";
 import UsersManagement from "./pages/Users/UsersManagement";
 import GalleryConfig from "./pages/Config/GalleryConfig";
+import ChatBotConfig from "./pages/Config/ChatBotConfig";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ const App = () => (
               <Route path="manuals" element={<ManualsConfig />} />
               <Route path="incidents" element={<IncidentsConfig />} />
               <Route path="gallery" element={<GalleryConfig />} />
+              <Route path="chatbot" element={<ChatBotConfig />} />
               <Route path="reservations" element={<ReservationsConfig />} />
               <Route path="reservations/tables" element={<TablesList />} />
               <Route path="reservations/list" element={<ReservationsList />} />

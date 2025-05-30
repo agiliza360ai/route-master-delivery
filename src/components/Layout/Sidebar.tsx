@@ -10,7 +10,8 @@ import {
   Calendar,
   Ticket,
   Users,
-  ImageIcon
+  ImageIcon,
+  Bot
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -36,6 +37,7 @@ const ConfigurationSidebar = () => {
     { title: "Datos de Marca", path: "/config/brand", icon: Badge },
     { title: "Planes y Pagos", path: "/config/plans", icon: FileText },
     { title: "Usuarios", path: "/users", icon: Users },
+    { title: "ChatBot IA", path: "/config/chatbot", icon: Bot },
     { title: "Reservas", path: "/config/reservations", icon: Calendar },
     { title: "Galería", path: "/config/gallery", icon: ImageIcon },
     { title: "Manuales", path: "/config/manuals", icon: Book },

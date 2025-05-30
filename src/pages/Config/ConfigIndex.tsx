@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge, FileText, Book, Ticket, ImageIcon, Calendar } from 'lucide-react';
+import { Badge, FileText, Book, Ticket, ImageIcon, Calendar, Bot } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const ConfigItem = ({ 
@@ -48,6 +48,12 @@ const ConfigIndex = () => {
           description="Administre su plan contratado y opciones de pago" 
           icon={FileText} 
           href="/config/plans" 
+        />
+        <ConfigItem 
+          title="ChatBot IA" 
+          description="Configure el estilo de comunicación de su bot de WhatsApp" 
+          icon={Bot} 
+          href="/config/chatbot" 
         />
         <ConfigItem 
           title="Manuales" 
