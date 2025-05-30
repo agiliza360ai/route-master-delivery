@@ -5,12 +5,13 @@ import { Edit, Trash2, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface DraggableTableProps {
-  table: TableType & { x: number; y: number };
+  table: TableType & { x: number; y: number; width?: number; height?: number };
   isEditMode: boolean;
   onMove: (tableId: string, newX: number, newY: number) => void;
   onEdit: (table: TableType) => void;
   onDelete: (tableId: string) => void;
   onResize: (tableId: string, newSize: TableType['size']) => void;
+  onManualResize?: (tableId: string, newWidth: number, newHeight: number) => void;
 }
 
 const getTableColor = (status: TableType['status']) => {
@@ -48,16 +49,21 @@ const DraggableTable: React.FC<DraggableTableProps> = ({
   onEdit,
   onDelete,
   onResize,
+  onManualResize,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
+  const [isResizing, setIsResizing] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [resizeStart, setResizeStart] = useState({ x: 0, y: 0, width: 0, height: 0 });
   const tableRef = useRef<HTMLDivElement>(null);
 
-  const tableSize = getTableSize(table.size);
+  const defaultSize = getTableSize(table.size);
+  const tableWidth = table.width || defaultSize.width;
+  const tableHeight = table.height || defaultSize.height;
   const isRound = table.shape === 'round';
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (!isEditMode) return;
+    if (!isEditMode || isResizing) return;
     
     e.preventDefault();
     setIsDragging(true);
@@ -71,21 +77,45 @@ const DraggableTable: React.FC<DraggableTableProps> = ({
     }
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
-    if (!isDragging || !isEditMode) return;
+  const handleResizeMouseDown = (e: React.MouseEvent) => {
+    if (!isEditMode || !table.shape === 'rectangular') return;
     
-    const boardElement = tableRef.current?.parentElement;
-    if (boardElement) {
-      const boardRect = boardElement.getBoundingClientRect();
-      const newX = e.clientX - boardRect.left - dragOffset.x;
-      const newY = e.clientY - boardRect.top - dragOffset.y;
+    e.preventDefault();
+    e.stopPropagation();
+    setIsResizing(true);
+    
+    setResizeStart({
+      x: e.clientX,
+      y: e.clientY,
+      width: tableWidth,
+      height: tableHeight,
+    });
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (isDragging && !isResizing && isEditMode) {
+      const boardElement = tableRef.current?.parentElement;
+      if (boardElement) {
+        const boardRect = boardElement.getBoundingClientRect();
+        const newX = e.clientX - boardRect.left - dragOffset.x;
+        const newY = e.clientY - boardRect.top - dragOffset.y;
+        
+        onMove(table.id, newX, newY);
+      }
+    } else if (isResizing && isEditMode && onManualResize) {
+      const deltaX = e.clientX - resizeStart.x;
+      const deltaY = e.clientY - resizeStart.y;
       
-      onMove(table.id, newX, newY);
+      const newWidth = Math.max(40, resizeStart.width + deltaX);
+      const newHeight = Math.max(40, resizeStart.height + deltaY);
+      
+      onManualResize(table.id, newWidth, newHeight);
     }
   };
 
   const handleMouseUp = () => {
     setIsDragging(false);
+    setIsResizing(false);
   };
 
   const handleSizeChange = (newSize: TableType['size']) => {
@@ -93,7 +123,7 @@ const DraggableTable: React.FC<DraggableTableProps> = ({
   };
 
   React.useEffect(() => {
-    if (isDragging) {
+    if (isDragging || isResizing) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
       
@@ -102,7 +132,7 @@ const DraggableTable: React.FC<DraggableTableProps> = ({
         document.removeEventListener('mouseup', handleMouseUp);
       };
     }
-  }, [isDragging, dragOffset]);
+  }, [isDragging, isResizing, dragOffset, resizeStart]);
 
   return (
     <div
@@ -111,12 +141,12 @@ const DraggableTable: React.FC<DraggableTableProps> = ({
         isRound ? 'rounded-full' : 'rounded-lg'
       } ${
         isEditMode ? 'cursor-move hover:shadow-lg' : 'cursor-pointer hover:shadow-md'
-      } ${isDragging ? 'shadow-xl scale-105 z-10' : ''}`}
+      } ${isDragging ? 'shadow-xl scale-105 z-10' : ''} ${isResizing ? 'z-20' : ''}`}
       style={{ 
         left: table.x, 
         top: table.y, 
-        width: tableSize.width, 
-        height: tableSize.height 
+        width: tableWidth, 
+        height: tableHeight 
       }}
       onMouseDown={handleMouseDown}
       onClick={() => !isEditMode && onEdit(table)}
@@ -189,6 +219,14 @@ const DraggableTable: React.FC<DraggableTableProps> = ({
               L
             </Button>
           </div>
+
+          {/* Resize handle for rectangular tables */}
+          {table.shape === 'rectangular' && (
+            <div
+              className="absolute -bottom-1 -right-1 w-3 h-3 bg-purple-500 cursor-se-resize rounded-sm border border-white shadow-sm hover:bg-purple-600"
+              onMouseDown={handleResizeMouseDown}
+            />
+          )}
         </>
       )}
     </div>

@@ -7,12 +7,12 @@ import { Table as TableType } from '@/types/reservation';
 import TableModal from '../Tables/TableModal';
 import DraggableTable from './DraggableTable';
 
-// Mock data for tables with positions, shapes and sizes
-const MOCK_TABLES: (TableType & { x: number; y: number })[] = [
+// Mock data for tables with positions, shapes, sizes and custom dimensions
+const MOCK_TABLES: (TableType & { x: number; y: number; width?: number; height?: number })[] = [
   { id: '1', name: 'M01', capacity: 2, status: 'available', shape: 'round', size: 'small', x: 100, y: 100 },
-  { id: '2', name: 'M02', capacity: 4, status: 'occupied', shape: 'rectangular', size: 'medium', x: 250, y: 150 },
+  { id: '2', name: 'M02', capacity: 4, status: 'occupied', shape: 'rectangular', size: 'medium', x: 250, y: 150, width: 120, height: 80 },
   { id: '3', name: 'M03', capacity: 6, status: 'reserved', shape: 'round', size: 'large', x: 400, y: 200 },
-  { id: '4', name: 'M04', capacity: 8, status: 'maintenance', shape: 'rectangular', size: 'large', x: 150, y: 300 },
+  { id: '4', name: 'M04', capacity: 8, status: 'maintenance', shape: 'rectangular', size: 'large', x: 150, y: 300, width: 140, height: 100 },
   { id: '5', name: 'M05', capacity: 4, status: 'available', shape: 'round', size: 'medium', x: 350, y: 350 },
 ];
 
@@ -36,7 +36,17 @@ const TableBoard: React.FC = () => {
   const handleTableResize = (tableId: string, newSize: TableType['size']) => {
     setTables(tables.map(table => 
       table.id === tableId 
-        ? { ...table, size: newSize }
+        ? { ...table, size: newSize, width: undefined, height: undefined } // Reset custom dimensions when using predefined sizes
+        : table
+    ));
+  };
+
+  const handleManualResize = (tableId: string, newWidth: number, newHeight: number) => {
+    if (!isEditMode) return;
+    
+    setTables(tables.map(table => 
+      table.id === tableId 
+        ? { ...table, width: newWidth, height: newHeight }
         : table
     ));
   };
@@ -104,7 +114,7 @@ const TableBoard: React.FC = () => {
             Plano del Restaurante
             {isEditMode && (
               <span className="text-sm font-normal text-purple-600 bg-purple-100 px-2 py-1 rounded">
-                Modo Edición Activo - Arrastra las mesas y cambia su tamaño
+                Modo Edición Activo - Arrastra las mesas y redimensiona las rectangulares
               </span>
             )}
           </CardTitle>
@@ -123,6 +133,7 @@ const TableBoard: React.FC = () => {
                 onEdit={handleEditTable}
                 onDelete={handleDeleteTable}
                 onResize={handleTableResize}
+                onManualResize={handleManualResize}
               />
             ))}
             
