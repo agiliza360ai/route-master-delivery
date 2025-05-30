@@ -1,9 +1,10 @@
-
 export interface Table {
   id: string;
   name: string;
   capacity: number;
   status: 'available' | 'occupied' | 'reserved' | 'maintenance';
+  shape: 'round' | 'rectangular';
+  size: 'small' | 'medium' | 'large';
 }
 
 export interface Reservation {

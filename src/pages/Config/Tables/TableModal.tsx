@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table } from '@/types/reservation';
 import { useForm } from 'react-hook-form';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
@@ -28,6 +29,8 @@ const TableModal: React.FC<TableModalProps> = ({
       name: '',
       capacity: 4,
       status: 'available',
+      shape: 'round',
+      size: 'medium',
     },
   });
 
@@ -75,6 +78,56 @@ const TableModal: React.FC<TableModalProps> = ({
                       {...field} 
                       onChange={(e) => field.onChange(parseInt(e.target.value))}
                     />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="shape"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tipo de Mesa</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      className="flex flex-row space-x-6"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="round" id="round" />
+                        <Label htmlFor="round">Redonda</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="rectangular" id="rectangular" />
+                        <Label htmlFor="rectangular">Rectangular</Label>
+                      </div>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="size"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tamaño</FormLabel>
+                  <FormControl>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Seleccionar tamaño" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="small">Pequeña</SelectItem>
+                        <SelectItem value="medium">Mediana</SelectItem>
+                        <SelectItem value="large">Grande</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

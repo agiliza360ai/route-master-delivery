@@ -10,6 +10,7 @@ interface DraggableTableProps {
   onMove: (tableId: string, newX: number, newY: number) => void;
   onEdit: (table: TableType) => void;
   onDelete: (tableId: string) => void;
+  onResize: (tableId: string, newSize: TableType['size']) => void;
 }
 
 const getTableColor = (status: TableType['status']) => {
@@ -27,16 +28,33 @@ const getTableColor = (status: TableType['status']) => {
   }
 };
 
+const getTableSize = (size: TableType['size']) => {
+  switch (size) {
+    case 'small':
+      return { width: 60, height: 60 };
+    case 'medium':
+      return { width: 80, height: 80 };
+    case 'large':
+      return { width: 100, height: 100 };
+    default:
+      return { width: 80, height: 80 };
+  }
+};
+
 const DraggableTable: React.FC<DraggableTableProps> = ({
   table,
   isEditMode,
   onMove,
   onEdit,
   onDelete,
+  onResize,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const tableRef = useRef<HTMLDivElement>(null);
+
+  const tableSize = getTableSize(table.size);
+  const isRound = table.shape === 'round';
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!isEditMode) return;
@@ -70,6 +88,10 @@ const DraggableTable: React.FC<DraggableTableProps> = ({
     setIsDragging(false);
   };
 
+  const handleSizeChange = (newSize: TableType['size']) => {
+    onResize(table.id, newSize);
+  };
+
   React.useEffect(() => {
     if (isDragging) {
       document.addEventListener('mousemove', handleMouseMove);
@@ -85,10 +107,17 @@ const DraggableTable: React.FC<DraggableTableProps> = ({
   return (
     <div
       ref={tableRef}
-      className={`absolute w-20 h-20 rounded-lg border-2 flex flex-col items-center justify-center text-xs font-medium transition-all ${getTableColor(table.status)} ${
+      className={`absolute border-2 flex flex-col items-center justify-center text-xs font-medium transition-all ${getTableColor(table.status)} ${
+        isRound ? 'rounded-full' : 'rounded-lg'
+      } ${
         isEditMode ? 'cursor-move hover:shadow-lg' : 'cursor-pointer hover:shadow-md'
       } ${isDragging ? 'shadow-xl scale-105 z-10' : ''}`}
-      style={{ left: table.x, top: table.y }}
+      style={{ 
+        left: table.x, 
+        top: table.y, 
+        width: tableSize.width, 
+        height: tableSize.height 
+      }}
       onMouseDown={handleMouseDown}
       onClick={() => !isEditMode && onEdit(table)}
     >
@@ -99,30 +128,68 @@ const DraggableTable: React.FC<DraggableTableProps> = ({
       </div>
       
       {isEditMode && (
-        <div className="absolute -top-2 -right-2 flex gap-1">
-          <Button
-            size="sm"
-            variant="outline"
-            className="h-6 w-6 p-0 bg-white border-purple-300 hover:bg-purple-50"
-            onClick={(e) => {
-              e.stopPropagation();
-              onEdit(table);
-            }}
-          >
-            <Edit className="h-3 w-3 text-purple-600" />
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            className="h-6 w-6 p-0 bg-white border-red-300 hover:bg-red-50"
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete(table.id);
-            }}
-          >
-            <Trash2 className="h-3 w-3 text-red-600" />
-          </Button>
-        </div>
+        <>
+          <div className="absolute -top-2 -right-2 flex gap-1">
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-6 w-6 p-0 bg-white border-purple-300 hover:bg-purple-50"
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit(table);
+              }}
+            >
+              <Edit className="h-3 w-3 text-purple-600" />
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-6 w-6 p-0 bg-white border-red-300 hover:bg-red-50"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(table.id);
+              }}
+            >
+              <Trash2 className="h-3 w-3 text-red-600" />
+            </Button>
+          </div>
+          
+          <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex gap-1">
+            <Button
+              size="sm"
+              variant={table.size === 'small' ? 'default' : 'outline'}
+              className="h-5 w-5 p-0 text-xs"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleSizeChange('small');
+              }}
+            >
+              S
+            </Button>
+            <Button
+              size="sm"
+              variant={table.size === 'medium' ? 'default' : 'outline'}
+              className="h-5 w-5 p-0 text-xs"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleSizeChange('medium');
+              }}
+            >
+              M
+            </Button>
+            <Button
+              size="sm"
+              variant={table.size === 'large' ? 'default' : 'outline'}
+              className="h-5 w-5 p-0 text-xs"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleSizeChange('large');
+              }}
+            >
+              L
+            </Button>
+          </div>
+        </>
       )}
     </div>
   );
