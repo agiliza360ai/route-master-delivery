@@ -1,29 +1,43 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Edit3, Plus, Settings, Undo } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Edit3, Plus, Settings, Undo, MapPin } from 'lucide-react';
 import { Table as TableType } from '@/types/reservation';
 import TableModal from '../Tables/TableModal';
 import DraggableTable from './DraggableTable';
+import ZoneModal from './ZoneModal';
+
+// Mock data for zones
+const MOCK_ZONES = [
+  { id: '1', name: 'Salón Principal' },
+  { id: '2', name: 'Terraza' },
+  { id: '3', name: 'Zona VIP' },
+];
 
 // Mock data for tables with positions, shapes, sizes and custom dimensions
-const MOCK_TABLES: (TableType & { x: number; y: number; width?: number; height?: number })[] = [
-  { id: '1', name: 'M01', capacity: 2, status: 'available', shape: 'round', size: 'small', x: 100, y: 100 },
-  { id: '2', name: 'M02', capacity: 4, status: 'occupied', shape: 'rectangular', size: 'medium', x: 250, y: 150, width: 120, height: 80 },
-  { id: '3', name: 'M03', capacity: 6, status: 'reserved', shape: 'round', size: 'large', x: 400, y: 200 },
-  { id: '4', name: 'M04', capacity: 8, status: 'maintenance', shape: 'rectangular', size: 'large', x: 150, y: 300, width: 140, height: 100 },
-  { id: '5', name: 'M05', capacity: 4, status: 'available', shape: 'round', size: 'medium', x: 350, y: 350 },
+const MOCK_TABLES: (TableType & { x: number; y: number; width?: number; height?: number; zoneId: string })[] = [
+  { id: '1', name: 'M01', capacity: 2, status: 'available', shape: 'round', size: 'small', x: 100, y: 100, zoneId: '1' },
+  { id: '2', name: 'M02', capacity: 4, status: 'occupied', shape: 'rectangular', size: 'medium', x: 250, y: 150, width: 120, height: 80, zoneId: '1' },
+  { id: '3', name: 'M03', capacity: 6, status: 'reserved', shape: 'round', size: 'large', x: 400, y: 200, zoneId: '2' },
+  { id: '4', name: 'M04', capacity: 8, status: 'maintenance', shape: 'rectangular', size: 'large', x: 150, y: 300, width: 140, height: 100, zoneId: '2' },
+  { id: '5', name: 'M05', capacity: 4, status: 'available', shape: 'round', size: 'medium', x: 350, y: 350, zoneId: '3' },
 ];
 
 const TableBoard: React.FC = () => {
   const [tables, setTables] = useState(MOCK_TABLES);
+  const [zones, setZones] = useState(MOCK_ZONES);
+  const [selectedZone, setSelectedZone] = useState('1');
   const [isEditMode, setIsEditMode] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isZoneModalOpen, setIsZoneModalOpen] = useState(false);
   const [selectedTable, setSelectedTable] = useState<TableType | null>(null);
   const [boardSize] = useState({ width: 800, height: 600 });
   const [history, setHistory] = useState<(typeof MOCK_TABLES)[]>([MOCK_TABLES]);
   const [historyIndex, setHistoryIndex] = useState(0);
+
+  // Filter tables by selected zone
+  const filteredTables = tables.filter(table => table.zoneId === selectedZone);
 
   const saveToHistory = (newTables: typeof tables) => {
     const newHistory = history.slice(0, historyIndex + 1);
@@ -55,7 +69,7 @@ const TableBoard: React.FC = () => {
   const handleTableResize = (tableId: string, newSize: TableType['size']) => {
     const newTables = tables.map(table => 
       table.id === tableId 
-        ? { ...table, size: newSize, width: undefined, height: undefined } // Reset custom dimensions when using predefined sizes
+        ? { ...table, size: newSize, width: undefined, height: undefined }
         : table
     );
     setTables(newTables);
@@ -87,15 +101,14 @@ const TableBoard: React.FC = () => {
   const handleSaveTable = (tableData: TableType) => {
     let newTables;
     if (selectedTable) {
-      // Update existing table
       newTables = tables.map(t => t.id === tableData.id ? { ...t, ...tableData } : t);
     } else {
-      // Add new table
       const newTable = {
         ...tableData,
         id: `${Math.floor(Math.random() * 10000)}`,
         x: 50,
         y: 50,
+        zoneId: selectedZone,
       };
       newTables = [...tables, newTable];
     }
@@ -108,6 +121,24 @@ const TableBoard: React.FC = () => {
     const newTables = tables.filter(t => t.id !== tableId);
     setTables(newTables);
     saveToHistory(newTables);
+  };
+
+  const handleCreateZone = () => {
+    setIsZoneModalOpen(true);
+  };
+
+  const handleSaveZone = (zoneName: string) => {
+    const newZone = {
+      id: `${Math.floor(Math.random() * 10000)}`,
+      name: zoneName,
+    };
+    setZones([...zones, newZone]);
+    setIsZoneModalOpen(false);
+  };
+
+  const getCurrentZoneName = () => {
+    const zone = zones.find(z => z.id === selectedZone);
+    return zone?.name || 'Zona sin nombre';
   };
 
   return (
@@ -144,11 +175,39 @@ const TableBoard: React.FC = () => {
         </div>
       </div>
 
+      <div className="flex gap-4 items-center">
+        <div className="flex items-center gap-2">
+          <MapPin className="h-5 w-5 text-purple-600" />
+          <span className="text-sm font-medium text-gray-700">Zona:</span>
+          <Select value={selectedZone} onValueChange={setSelectedZone}>
+            <SelectTrigger className="w-48">
+              <SelectValue placeholder="Seleccionar zona" />
+            </SelectTrigger>
+            <SelectContent>
+              {zones.map((zone) => (
+                <SelectItem key={zone.id} value={zone.id}>
+                  {zone.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <Button
+          onClick={handleCreateZone}
+          variant="outline"
+          size="sm"
+          className="border-purple-200 text-purple-700 hover:bg-purple-50"
+        >
+          <Plus className="mr-2 h-4 w-4" />
+          Nueva Zona
+        </Button>
+      </div>
+
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Settings className="h-5 w-5 text-purple-600" />
-            Plano del Restaurante
+            {getCurrentZoneName()}
             {isEditMode && (
               <span className="text-sm font-normal text-purple-600 bg-purple-100 px-2 py-1 rounded">
                 Modo Edición Activo - Arrastra las mesas y redimensiona las rectangulares
@@ -166,7 +225,7 @@ const TableBoard: React.FC = () => {
               backgroundSize: '20px 20px'
             }}
           >
-            {tables.map((table) => (
+            {filteredTables.map((table) => (
               <DraggableTable
                 key={table.id}
                 table={table}
@@ -179,11 +238,11 @@ const TableBoard: React.FC = () => {
               />
             ))}
             
-            {tables.length === 0 && (
+            {filteredTables.length === 0 && (
               <div className="absolute inset-0 flex items-center justify-center text-gray-500">
                 <div className="text-center">
                   <Settings className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                  <p>No hay mesas configuradas</p>
+                  <p>No hay mesas en {getCurrentZoneName()}</p>
                   <p className="text-sm">Haz clic en "Agregar Mesa" para comenzar</p>
                 </div>
               </div>
@@ -198,6 +257,14 @@ const TableBoard: React.FC = () => {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onSave={handleSaveTable}
+        />
+      )}
+
+      {isZoneModalOpen && (
+        <ZoneModal
+          isOpen={isZoneModalOpen}
+          onClose={() => setIsZoneModalOpen(false)}
+          onSave={handleSaveZone}
         />
       )}
     </div>
