@@ -6,16 +6,16 @@ import { Table as TableType } from '@/types/reservation';
 
 // Mock data for tables
 const MOCK_TABLES: (TableType & { reservationsCount?: number, timeRemaining?: string })[] = [
-  { id: '1', name: 'M01', capacity: 2, status: 'available' },
-  { id: '2', name: 'M02', capacity: 4, status: 'occupied' },
-  { id: '3', name: 'M03', capacity: 6, status: 'reserved', reservationsCount: 4, timeRemaining: '71d 22h 21m 53s' },
-  { id: '4', name: 'M04', capacity: 8, status: 'maintenance' },
-  { id: '5', name: 'M05', capacity: 4, status: 'available' },
-  { id: '6', name: 'M06', capacity: 2, status: 'available' },
-  { id: '7', name: 'M07', capacity: 6, status: 'available' },
-  { id: '8', name: 'M08', capacity: 8, status: 'available' },
-  { id: '9', name: 'M09', capacity: 4, status: 'available' },
-  { id: '10', name: 'M10', capacity: 2, status: 'available' },
+  { id: '1', name: 'M01', capacity: 2, status: 'available', shape: 'round', size: 'small' },
+  { id: '2', name: 'M02', capacity: 4, status: 'occupied', shape: 'rectangular', size: 'medium' },
+  { id: '3', name: 'M03', capacity: 6, status: 'reserved', shape: 'round', size: 'large', reservationsCount: 4, timeRemaining: '71d 22h 21m 53s' },
+  { id: '4', name: 'M04', capacity: 8, status: 'maintenance', shape: 'rectangular', size: 'large' },
+  { id: '5', name: 'M05', capacity: 4, status: 'available', shape: 'round', size: 'medium' },
+  { id: '6', name: 'M06', capacity: 2, status: 'available', shape: 'round', size: 'small' },
+  { id: '7', name: 'M07', capacity: 6, status: 'available', shape: 'rectangular', size: 'large' },
+  { id: '8', name: 'M08', capacity: 8, status: 'available', shape: 'rectangular', size: 'large' },
+  { id: '9', name: 'M09', capacity: 4, status: 'available', shape: 'round', size: 'medium' },
+  { id: '10', name: 'M10', capacity: 2, status: 'available', shape: 'round', size: 'small' },
 ];
 
 const getTableColor = (status: TableType['status']) => {
