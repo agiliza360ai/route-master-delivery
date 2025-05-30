@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Edit3, Plus, Settings } from 'lucide-react';
+import { Edit3, Plus, Settings, Undo } from 'lucide-react';
 import { Table as TableType } from '@/types/reservation';
 import TableModal from '../Tables/TableModal';
 import DraggableTable from './DraggableTable';
@@ -22,33 +22,56 @@ const TableBoard: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTable, setSelectedTable] = useState<TableType | null>(null);
   const [boardSize] = useState({ width: 800, height: 600 });
+  const [history, setHistory] = useState<(typeof MOCK_TABLES)[]>([MOCK_TABLES]);
+  const [historyIndex, setHistoryIndex] = useState(0);
+
+  const saveToHistory = (newTables: typeof tables) => {
+    const newHistory = history.slice(0, historyIndex + 1);
+    newHistory.push(newTables);
+    setHistory(newHistory);
+    setHistoryIndex(newHistory.length - 1);
+  };
+
+  const handleUndo = () => {
+    if (historyIndex > 0) {
+      const previousIndex = historyIndex - 1;
+      setTables(history[previousIndex]);
+      setHistoryIndex(previousIndex);
+    }
+  };
 
   const handleTableMove = (tableId: string, newX: number, newY: number) => {
     if (!isEditMode) return;
     
-    setTables(tables.map(table => 
+    const newTables = tables.map(table => 
       table.id === tableId 
         ? { ...table, x: Math.max(0, Math.min(newX, boardSize.width - 80)), y: Math.max(0, Math.min(newY, boardSize.height - 80)) }
         : table
-    ));
+    );
+    setTables(newTables);
+    saveToHistory(newTables);
   };
 
   const handleTableResize = (tableId: string, newSize: TableType['size']) => {
-    setTables(tables.map(table => 
+    const newTables = tables.map(table => 
       table.id === tableId 
         ? { ...table, size: newSize, width: undefined, height: undefined } // Reset custom dimensions when using predefined sizes
         : table
-    ));
+    );
+    setTables(newTables);
+    saveToHistory(newTables);
   };
 
   const handleManualResize = (tableId: string, newWidth: number, newHeight: number) => {
     if (!isEditMode) return;
     
-    setTables(tables.map(table => 
+    const newTables = tables.map(table => 
       table.id === tableId 
         ? { ...table, width: newWidth, height: newHeight }
         : table
-    ));
+    );
+    setTables(newTables);
+    saveToHistory(newTables);
   };
 
   const handleAddTable = () => {
@@ -62,9 +85,10 @@ const TableBoard: React.FC = () => {
   };
 
   const handleSaveTable = (tableData: TableType) => {
+    let newTables;
     if (selectedTable) {
       // Update existing table
-      setTables(tables.map(t => t.id === tableData.id ? { ...t, ...tableData } : t));
+      newTables = tables.map(t => t.id === tableData.id ? { ...t, ...tableData } : t);
     } else {
       // Add new table
       const newTable = {
@@ -73,13 +97,17 @@ const TableBoard: React.FC = () => {
         x: 50,
         y: 50,
       };
-      setTables([...tables, newTable]);
+      newTables = [...tables, newTable];
     }
+    setTables(newTables);
+    saveToHistory(newTables);
     setIsModalOpen(false);
   };
 
   const handleDeleteTable = (tableId: string) => {
-    setTables(tables.filter(t => t.id !== tableId));
+    const newTables = tables.filter(t => t.id !== tableId);
+    setTables(newTables);
+    saveToHistory(newTables);
   };
 
   return (
@@ -95,6 +123,15 @@ const TableBoard: React.FC = () => {
             className="bg-purple-600 hover:bg-purple-700"
           >
             <Plus className="mr-2 h-4 w-4" /> Agregar Mesa
+          </Button>
+          <Button
+            onClick={handleUndo}
+            disabled={historyIndex === 0}
+            variant="outline"
+            className="border-purple-200 text-purple-700 hover:bg-purple-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Undo className="mr-2 h-4 w-4" />
+            Deshacer
           </Button>
           <Button
             variant={isEditMode ? "default" : "outline"}
