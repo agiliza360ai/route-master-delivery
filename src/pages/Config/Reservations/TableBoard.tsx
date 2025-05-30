@@ -122,7 +122,12 @@ const TableBoard: React.FC = () => {
         <CardContent>
           <div 
             className="relative border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 overflow-hidden"
-            style={{ width: boardSize.width, height: boardSize.height }}
+            style={{ 
+              width: boardSize.width, 
+              height: boardSize.height,
+              backgroundImage: 'radial-gradient(circle, #cbd5e1 1px, transparent 1px)',
+              backgroundSize: '20px 20px'
+            }}
           >
             {tables.map((table) => (
               <DraggableTable
